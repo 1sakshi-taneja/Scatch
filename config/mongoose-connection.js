@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
+const config = require("config");
+const dbgr = require("debug")("development:mongoose");
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/scatch") // this means laptop pe chal rhe mongodb se connect karo(local mongoDB)
-  .then(function () {
-    console.log("connected");
+  .connect(`${config.get("MONGODB_URI")}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch(function (err) {
-    console.log(err);
+  .then(() => {
+    console.log("Connected to MongoDB Atlas");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB Atlas", error);
   });
 
-module.exports = mongoose.connection; // scatch DB pe pura control iske through mil jaega
-
-// making sure ki routes ko shi jagah pe bheju
+module.exports = mongoose.connection;
